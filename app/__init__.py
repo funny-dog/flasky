@@ -5,6 +5,7 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_pagedown import PageDown
+from flask_babel import Babel
 from config import config
 
 bootstrap = Bootstrap()
@@ -12,6 +13,7 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 pagedown = PageDown()
+babel = Babel()
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -28,6 +30,7 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     pagedown.init_app(app)
+    babel.init_app(app)
 
     if app.config['SSL_REDIRECT']:
         from flask_sslify import SSLify

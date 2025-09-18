@@ -20,6 +20,8 @@ class Config:
     FLASKY_FOLLOWERS_PER_PAGE = 50
     FLASKY_COMMENTS_PER_PAGE = 30
     FLASKY_SLOW_DB_QUERY_TIME = 0.5
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
 
     @staticmethod
     def init_app(app):
@@ -42,7 +44,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-    SERVER_NAME = os.environ['SERVER_NAME']  # configure the domain name in use
+    SERVER_NAME = os.environ.get('SERVER_NAME')  # configure the domain name in use
 
     @classmethod
     def init_app(cls, app):
