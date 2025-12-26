@@ -3,7 +3,7 @@ FROM python:3.9-slim
 ENV FLASK_APP flasky.py
 ENV FLASK_CONFIG development
 
-RUN adduser -D flasky
+RUN adduser --disabled-password flasky
 USER flasky
 
 WORKDIR /home/flasky

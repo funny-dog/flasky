@@ -46,47 +46,62 @@ flasky/
 ### 环境要求
 
 - Python 3.9+
-- pip
+- PDM (推荐) 或 pip
 
 ### 安装步骤
 
-1. **克隆仓库**
+#### 方式一：使用 PDM（推荐）
+
+1. **安装依赖**
 
 ```bash
-git clone https://github.com/miguelgrinberg/flasky.git
-cd flasky
+pdm install
 ```
 
-2. **创建虚拟环境**
+2. **初始化数据库**
+
+```bash
+pdm run flask deploy
+```
+
+3. **启动应用**
+
+```bash
+pdm start
+```
+或者
+```bash
+pdm run flask run
+```
+
+#### 方式二：使用 pip（传统方式）
+
+1. **创建虚拟环境并安装依赖**
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
-# 或
-venv\Scripts\activate     # Windows
-```
+# 或 venv\Scripts\activate  # Windows
 
-3. **安装依赖**
-
-```bash
 pip install -r requirements/dev.txt
 ```
 
-4. **配置环境变量**
+2. **配置环境变量**
+
+项目已包含 `.env` 文件模板，确保设置以下变量：
 
 ```bash
 export FLASK_APP=flasky.py
 export FLASK_CONFIG=development
 ```
 
-5. **初始化数据库**
+3. **初始化数据库**
 
 ```bash
-flask db upgrade
 flask deploy
 ```
 
-6. **运行应用**
+4. **运行应用**
 
 ```bash
 flask run
@@ -99,55 +114,46 @@ flask run
 ### 运行应用
 
 ```bash
-# 开发环境
-flask run
+# 使用 PDM (会自动加载 .env)
+pdm start
 
-# 生产环境（使用 gunicorn）
-gunicorn flasky:app
+# 或手动运行
+flask run
 ```
 
 ### 数据库操作
 
 ```bash
 # 初始化/升级数据库
+pdm run flask db upgrade
+# 或
 flask db upgrade
 
 # 应用部署（运行迁移、插入角色）
-flask deploy
-
-# 生成迁移
-flask db migrate -m "迁移信息"
-
-# 回滚迁移
-flask db downgrade
+pdm run flask deploy
 ```
 
 ### 测试
 
 ```bash
-# 运行所有测试
-flask test
-
-# 运行特定测试
-flask test tests.test_user_model
-
-# 带覆盖率测试
-flask test --coverage
+pdm run flask test
 ```
 
 ## 🐳 Docker 部署
 
-### 使用 Docker Compose
+### 使用 Docker Compose (推荐)
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
-### 使用 Docker
+访问 http://localhost:8000 即可查看应用。
+
+### 使用 Docker 手动构建
 
 ```bash
 docker build -t flasky .
-docker run -p 5000:5000 flasky
+docker run -p 8000:5000 flasky
 ```
 
 ## ☁️ Heroku 部署
