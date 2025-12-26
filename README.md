@@ -1,199 +1,94 @@
-# Flasky
+# Flasky - Modern Flask 3.x Boilerplate
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-0.12.2-green.svg)](https://flask.palletsprojects.com/)
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.0+-green.svg)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Bootstrap 5](https://img.shields.io/badge/Bootstrap-5-purple.svg)](https://getbootstrap.com/)
 
-> 基于 Miguel Grinberg 所著《Flask Web Development》一书的 Flask 社交博客应用程序
+> 基于 Miguel Grinberg 经典 Flasky 项目重构的现代 Flask 3.x 应用模板。
 
-## 📖 项目简介
+## 🚀 项目简介
 
-Flasky 是一个功能完整的社交博客应用，包含用户认证、博客文章发布、评论系统和用户关注功能。本项目是 O'Reilly 出版的《[Flask Web Development](http://www.flaskbook.com)》第二版的配套源代码。
+这是一个基于 Flask 3.x 完全重构的社交博客应用。相比原版，本项目去除了过时的依赖（如 Flask-Bootstrap/Flask-Script），采用了现代的 Flask 生态最佳实践。
+
+**核心更新：**
+*   **Flask 3.x**: 适配最新 Flask 生态。
+*   **Bootstrap 5**: 从 Bootstrap 3 迁移到 Bootstrap 5 (使用 `bootstrap-flask`)，界面更现代。
+*   **Minimal Setup**: 简化 `flasky.py` 入口，拥抱原生 `flask` CLI。
+*   **Docker Optimized**: 使用 Python 3.12-slim 的多阶段或精简构建。
+*   **Modern Coding**: 根据 2025 年标准更新了代码风格，移除 `itsdangerous` 过期用法，修复 `bleach` 等已弃用库的问题。
 
 ## ✨ 功能特性
 
-- 🔐 **用户认证系统** - 注册、登录、密码重置、邮箱验证
-- 📝 **博客文章** - 支持 Markdown 格式的文章发布与编辑
-- 💬 **评论系统** - 文章评论功能，支持管理审核
-- 👥 **社交功能** - 用户关注/取消关注、动态时间线
-- 🔑 **角色权限** - 基于角色的权限管理系统
-- 📮 **邮件通知** - 使用 Flask-Mail 发送邮件通知
-- 🌐 **RESTful API** - 带令牌认证的完整 API 接口
+- 🔐 **用户认证** - 安全的注册、登录与令牌管理 (Flask-Login)
+- 📝 **博客系统** - Markdown 文章发布，支持 HTML 净化 (Bleach)
+- 💬 **互动评论** - 文章评论与管理
+- 👥 **关注系统** - 社交关注与动态流
+- 🛡️ **权限管理** - 基于角色的访问控制 (RBAC)
+- 🐳 **Docker 支持** - 开箱即用的容器化部署配置
 
-## 🏗️ 项目结构
+## 🛠️ 技术栈
 
-```
-flasky/
-├── app/                    # 应用程序主目录
-│   ├── api/               # RESTful API 蓝图
-│   ├── auth/              # 用户认证蓝图
-│   ├── main/              # 主要视图蓝图
-│   ├── templates/         # Jinja2 模板
-│   ├── static/            # 静态资源
-│   ├── models.py          # 数据库模型
-│   └── email.py           # 邮件功能
-├── migrations/            # 数据库迁移脚本
-├── tests/                 # 测试文件
-├── requirements/          # 依赖包配置
-├── config.py              # 应用配置
-├── flasky.py              # 应用入口
-├── Dockerfile             # Docker 配置
-└── docker-compose.yml     # Docker Compose 配置
-```
+- **Core**: Flask 3.x, Werkzeug 3.x
+- **Database**: SQLAlchemy 2.x (via Flask-SQLAlchemy 3.x), Alembic
+- **Frontend**: Bootstrap 5, Jinja2
+- **Utilities**: Click, Python-Dotenv
 
 ## 🚀 快速开始
 
-### 环境要求
+### 1. 环境准备
 
-- Python 3.9+
-- PDM (推荐) 或 pip
-
-### 安装步骤
-
-#### 方式一：使用 PDM（推荐）
-
-1. **安装依赖**
+推荐使用 Python 3.12+。
 
 ```bash
-pdm install
-```
-
-2. **初始化数据库**
-
-```bash
-pdm run flask deploy
-```
-
-3. **启动应用**
-
-```bash
-pdm start
-```
-或者
-```bash
-pdm run flask run
-```
-
-#### 方式二：使用 pip（传统方式）
-
-1. **创建虚拟环境并安装依赖**
-
-```bash
+git clone https://github.com/your/flasky.git
+cd flasky
 python -m venv venv
-source venv/bin/activate  # Linux/macOS
-# 或 venv\Scripts\activate  # Windows
-
-pip install -r requirements/dev.txt
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-2. **配置环境变量**
+### 2. 配置与初始化
 
-项目已包含 `.env` 文件模板，确保设置以下变量：
-
-```bash
-export FLASK_APP=flasky.py
-export FLASK_CONFIG=development
-```
-
-3. **初始化数据库**
+创建 `.env` 文件（可选，Flask 会自动加载）：
 
 ```bash
 flask deploy
 ```
+> `flask deploy` 会自动执行数据库迁移、创建角色等初始化操作。
 
-4. **运行应用**
+### 3. 运行应用
 
 ```bash
 flask run
 ```
+访问 http://localhost:5000
 
-访问 http://localhost:5000 即可查看应用。
-
-## 🔧 常用命令
-
-### 运行应用
+## 🐳 Docker 部署
 
 ```bash
-# 使用 PDM (会自动加载 .env)
-pdm start
-
-# 或手动运行
-flask run
+docker build -t flasky:latest .
+docker run -p 5000:5000 flasky:latest
 ```
 
-### 数据库操作
+## 🔧 开发指南
+
+### 数据库迁移
+
+使用 Flask-Migrate (Alembic) 管理数据库变更：
 
 ```bash
-# 初始化/升级数据库
-pdm run flask db upgrade
-# 或
+flask db migrate -m "migration message"
 flask db upgrade
-
-# 应用部署（运行迁移、插入角色）
-pdm run flask deploy
 ```
 
 ### 测试
 
+运行单元测试：
 ```bash
-pdm run flask test
+flask test
 ```
-
-## 🐳 Docker 部署
-
-### 使用 Docker Compose (推荐)
-
-```bash
-docker-compose up -d --build
-```
-
-访问 http://localhost:8000 即可查看应用。
-
-### 使用 Docker 手动构建
-
-```bash
-docker build -t flasky .
-docker run -p 8000:5000 flasky
-```
-
-## ☁️ Heroku 部署
-
-项目已配置好 Heroku 部署所需文件：
-
-- `Procfile` - Heroku 进程配置
-- `requirements.txt` - 引用 Heroku 专用依赖
-
-```bash
-heroku create
-git push heroku main
-heroku run flask deploy
-```
-
-## ⚙️ 环境变量
-
-| 变量名 | 描述 | 默认值 |
-|--------|------|--------|
-| `FLASK_CONFIG` | 配置环境 (development, testing, production, heroku, docker) | development |
-| `SECRET_KEY` | Flask 密钥 | hard to guess string |
-| `DATABASE_URL` | 生产环境数据库 URL | SQLite |
-| `MAIL_SERVER` | 邮件服务器 | smtp.googlemail.com |
-| `MAIL_PORT` | 邮件端口 | 587 |
-| `MAIL_USERNAME` | 邮件用户名 | - |
-| `MAIL_PASSWORD` | 邮件密码 | - |
-| `FLASKY_ADMIN` | 管理员邮箱 | - |
-
-## 📚 相关资源
-
-- 📖 [《Flask Web Development》图书](http://www.flaskbook.com)
-- 📂 [第一版源代码](https://github.com/miguelgrinberg/flasky-first-edition)
-- 📘 [Flask 官方文档](https://flask.palletsprojects.com/)
-
-## 📝 关于本书
-
-本仓库中的提交和标签经过精心设计，与书中概念的呈现顺序相匹配。请阅读书籍前言中"如何使用示例代码"一节以获取详细说明。
 
 ## 📄 许可证
 
-本项目采用 [MIT 许可证](LICENSE)。
-
-Copyright © 2013 Miguel Grinberg
+MIT License

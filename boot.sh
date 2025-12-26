@@ -1,5 +1,5 @@
 #!/bin/sh
-. venv/bin/activate
+# . venv/bin/activate # Not needed in Docker as we install to system
 
 while true; do
     flask deploy

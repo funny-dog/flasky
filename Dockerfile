@@ -1,21 +1,22 @@
-FROM python:3.9-slim
+FROM python:3.12-slim
 
-ENV FLASK_APP flasky.py
-ENV FLASK_CONFIG development
+ENV FLASK_APP=flasky.py
+ENV FLASK_CONFIG=docker
+ENV PYTHONUNBUFFERED=1
 
-RUN adduser --disabled-password flasky
-USER flasky
+WORKDIR /app
 
-WORKDIR /home/flasky
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY requirements requirements
-RUN python -m venv venv
-RUN venv/bin/pip install -r requirements/docker.txt
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app app
 COPY migrations migrations
 COPY flasky.py config.py boot.sh ./
+RUN chmod +x boot.sh
 
-# run-time configuration
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
